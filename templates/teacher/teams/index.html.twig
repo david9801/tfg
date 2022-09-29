@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block pagetitle %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+    <div class="px-4 py-5 my-5 text-center">
+        <img class="d-block mx-auto mb-4" src="..." alt="" width="72" height="57">
+        <h1 class="display-5 fw-bold">Gestión de equipos</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">Consulta, modifica y crea nuevos equipos para la plataforma</p>
+        </div>
+    </div>
+    <div class="row text-center p-5">
+        <a href="{{ path('profile') }}" class="btn btn-danger w-auto m-auto"><i class="bi bi-arrow-return-left"></i> Volver</a>
+    </div>
+    {% for message in app.flashes('success') %}
+        <div class="flash-notice bg-success text-center w-50 m-auto">
+            <i class="bi bi-check-circle-fill"></i> {{ message }} <i class="bi bi-check-circle-fill"></i>
+        </div>
+    {% endfor %}
+    <div class="row text-center border border-dark shadow p-3">
+        <div class="col-md-12 col-lg-6">
+            <p>Añadir nuevo equipo</p>
+        </div>
+        <div class="col-md-12 col-lg-6">
+            {{ form_start(form, {'attr': {'class': 'd-flex w-75 justify-content-center m-auto'}}) }}
+                {{ form_row(form.name) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col"><i class="bi bi-person-square"></i> Equipo</th>
+            <th scope="col"><i class="bi bi-pencil-fill"></i> Renombrar</th>
+            <th scope="col"><i class="bi bi-trash-fill"></i> Borrar</th>
+            <th scope="col"><i class="bi bi-people-fill"></i> Alumnos</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for team in app.user.ownerteams %}
+            <tr>
+               <td>{{ team.name }}</td>
+                <td><a href="{{ path('team_edit', {id: team.id}) }}" class="btn btn-warning">Renombrar</a></td>
+                <td><a href="{{ path('team_delete', {id: team.id}) }}" class="btn btn-danger">Borrar</a></td>
+                <td><a href="{{ path('team_students', {id: team.id}) }}" class="btn btn-primary">Alumnos</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

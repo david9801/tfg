@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block pagetitle %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+    <div class="px-4 py-5 my-5 text-center">
+        <img class="d-block mx-auto mb-4" src="..." alt="" width="72" height="57">
+        <h1 class="display-5 fw-bold">Gestión de alumnos</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">Consulta, modifica y crea nuevos alumnos para la plataforma</p>
+        </div>
+    </div>
+    <div class="row text-center p-5">
+        <div class="col-lg-6 col-md-12">
+            <a href="{{ path('profile') }}" class="btn btn-danger"><i class="bi bi-arrow-return-left"></i> Volver</a>
+        </div>
+        <div class="col-lg-6 col-md-12">
+            <a href="{{ path('student_new') }}" class="btn btn-success"><i class="bi bi-person-plus-fill"></i> Nuevo alumno</a>
+        </div>
+    </div>
+    {% for message in app.flashes('success') %}
+        <div class="flash-notice bg-success text-center w-50 m-auto">
+            <i class="bi bi-check-circle-fill"></i> {{ message }} <i class="bi bi-check-circle-fill"></i>
+        </div>
+    {% endfor %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col"><i class="bi bi-person-square"></i> Alumno</th>
+            <th scope="col"><i class="bi bi-envelope-fill"></i> Correo</th>
+            <th scope="col"><i class="bi bi-pencil-fill"></i> Editar</th>
+            <th scope="col"><i class="bi bi-trash-fill"></i> Borrar</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.name }} {{ user.surname }}</td>
+                <td>{{ user.email }}</td>
+                {% if user == app.user %}
+                <td>----</td>
+                <td>----</td>
+                {% else %}
+                <td><a href="{{ path('student_edit', {id: user.id}) }}" class="btn btn-warning">Editar</a></td>
+                <td><a href="{{ path('student_delete', {id: user.id}) }}" class="btn btn-danger">Borrar</a></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

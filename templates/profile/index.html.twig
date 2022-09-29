@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block pagetitle %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+    <div class="container px-4 py-5" id="hanging-icons">
+        <h2 class="pb-2 border-bottom">Bienvenido, {{ app.user.name }} {{ app.user.surname }}</h2>
+        <a href="{{ path('logout') }}" class="btn btn-danger">
+            <i class="bi bi-box-arrow-left"></i> Salir
+        </a>
+        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+            <div class="col d-flex align-items-start">
+                <div class="border border-dark p-5 shadow">
+                    <h2><i class="bi bi-people-fill"></i> Equipos</h2>
+                    <p>Consulta tus equipos y entra en las clases.</p>
+                    <a href="{{ path('teams') }}" class="btn btn-primary w-100">
+                        Ir
+                    </a>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+                <div class="border border-dark p-5 shadow">
+                    <h2><i class="bi bi-gear-fill"></i> Ajustes</h2>
+                    <p>Cambia la contraseña de tu cuenta.</p>
+                    <a href="{{ path('edit_account') }}" class="btn btn-primary w-100">
+                        Ir
+                    </a>
+                </div>
+            </div>
+            {% if is_granted('ROLE_TEACHER') %}
+            <div class="col d-flex align-items-start">
+                <div class="border border-dark p-5 shadow">
+                    <h2><i class="bi bi-mortarboard-fill"></i> Zona de profesorado</h2>
+                    <p>Gestión de equipos y estudiantes.</p>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                           <a href="{{ path('students_admin') }}">Gestión de alumnos</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ path('teams_admin') }}">Gestión de equipos</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ path('lessons_admin') }}">Gestión de clases</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

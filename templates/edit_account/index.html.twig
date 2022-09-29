@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello EditAccountController!{% endblock %}
+
+{% block body %}
+    <div class="container col-xl-10 col-xxl-8 px-4 py-5">
+        {% for message in app.flashes('success') %}
+            <div class="flash-notice bg-success text-center w-50 m-auto">
+                <i class="bi bi-check-circle-fill"></i> {{ message }} <i class="bi bi-check-circle-fill"></i>
+            </div>
+        {% endfor %}
+        <div class="row text-center p-5">
+            <a href="{{ path('profile') }}" class="btn btn-danger w-auto m-auto"><i class="bi bi-arrow-return-left"></i> Volver</a>
+        </div>
+        <div class="row align-items-center g-lg-5 py-5">
+            <div class="col-lg-7 text-center text-lg-start">
+                <h1 class="display-4 fw-bold lh-1 mb-3">Editar cuenta</h1>
+                <p class="col-lg-10 fs-4">Rellene el formulario para editar los datos de su cuenta</p>
+                <p class="col-lg-10 fs-4">Si no desea modificar la contraseña, dejela en blanco</p>
+            </div>
+            <div class="col-md-10 mx-auto col-lg-5">
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

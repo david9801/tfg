@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Controller;
+
+use App\Form\EditStudentFormType;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Annotation\Route;
+
+class EditAccountController extends AbstractController
+{
+    /**
+     * @Route("/edit/account", name="edit_account")
+     */
+    public function index(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        $form = $this->createForm(EditStudentFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+            if (!is_null($form->get('plainPassword')->getData())){
+                //if password is set, update
+                // encode the plain password
+                $user->setPassword(
+                    $userPasswordHasher->hashPassword(
+                        $user,
+                        $form->get('plainPassword')->getData()
+                    )
+                );
+            }
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'Cuenta modificada con exito'
+            );
+        }
+
+        return $this->renderForm('edit_account/index.html.twig', [
+            'controller_name' => 'EditAccountController',
+            'form' => $form,
+        ]);
+    }
+}
