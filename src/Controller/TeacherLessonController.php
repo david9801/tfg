@@ -24,7 +24,7 @@ class TeacherLessonController extends AbstractController
     public function index(): Response
     {
         return $this->render('teacher/lessons/index.html.twig', [
-            'controller_name' => 'TeacherLessonController',
+            'controller_name' => 'Clases',
         ]);
     }
 
@@ -34,7 +34,7 @@ class TeacherLessonController extends AbstractController
     public function lessonsTeam(Team $team): Response
     {
         return $this->render('teacher/lessons/team.html.twig', [
-            'controller_name' => 'TeacherLessonController',
+            'controller_name' => 'Gestion de Clases',
             'team' => $team
         ]);
     }
@@ -61,7 +61,7 @@ class TeacherLessonController extends AbstractController
         }
 
         return $this->renderForm('teacher/lessons/new.html.twig', [
-            'controller_name' => 'TeacherLessonController',
+            'controller_name' => 'Asignatura',
             'form' => $form,
             'team' => $team
         ]);

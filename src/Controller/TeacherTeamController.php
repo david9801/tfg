@@ -27,7 +27,7 @@ class TeacherTeamController extends AbstractController
             'action' => $this->generateUrl('team_new'),
         ]);
         return $this->renderForm('teacher/teams/index.html.twig', [
-            'controller_name' => 'Gestion Alumnos',
+            'controller_name' => 'Gestion de Equipos',
             'form' => $form,
         ]);
     }

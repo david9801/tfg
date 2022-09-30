@@ -19,7 +19,7 @@ class TeamsController extends AbstractController
     public function index(): Response
     {
         return $this->render('teams/index.html.twig', [
-            'controller_name' => 'TeamsController',
+            'controller_name' => 'Equipos',
         ]);
     }
 
@@ -29,7 +29,7 @@ class TeamsController extends AbstractController
     public function teamMembers(Team $team): Response
     {
         return $this->render('teams/members.html.twig', [
-            'controller_name' => 'TeamsController',
+            'controller_name' => 'Alumnos',
             'team' => $team
         ]);
     }
@@ -40,7 +40,7 @@ class TeamsController extends AbstractController
     public function teamLessons(Team $team): Response
     {
         return $this->render('teams/lessons.html.twig', [
-            'controller_name' => 'TeamsController',
+            'controller_name' => 'Clases',
             'team' => $team
         ]);
     }
@@ -51,7 +51,7 @@ class TeamsController extends AbstractController
     public function enterLesson(Lesson $lesson): Response
     {
         return $this->render('teams/enterlesson.html.twig', [
-            'controller_name' => 'TeamsController',
+            'controller_name' => 'Clases',
             'lesson' => $lesson
         ]);
     }
