@@ -3,24 +3,28 @@
 {% block title %}Login! {% endblock %}
 
 {% block body %}
+
+
+
+
     {% if error %}
         <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
     <main class="form-signin text-center">
         <form action="{{ path('login') }}" method="post">
-            <img class="mb-4" src="" alt="" width="72" height="57">
-            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+            <img class="mb-4" src="https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_960_720.png" alt="" width="150" height="130">
+            <h1 class="h3 mb-3 fw-normal">Por favor, entra aqui!</h1>
 
-            <div class="form-floating">
+            <div class="form-floating" style="color:#990000" >
                 <input type="email" class="form-control" id="floatingInput" name="_username" placeholder="name@example.com">
                 <label for="floatingInput">Email address</label>
             </div>
-            <div class="form-floating">
+            <div class="form-floating" style="color:#990000">
                 <input type="password" class="form-control" id="floatingPassword" name="_password" placeholder="Password">
                 <label for="floatingPassword">Password</label>
             </div>
 
-            <div class="checkbox mb-3">
+            <div class="checkbox mb-3" style="color:#990000">
                 <label>
                     <input type="checkbox" value="remember-me"> Remember me
                 </label>
