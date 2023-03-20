@@ -12,4 +12,10 @@ import './styles/app.css';
 import './bootstrap';
 
 //script of carousel-transition
-import './js/app.js';
+$(document).ready(function() {
+    // Seleccionar el carousel por su ID y configurarlo para cambiar de imagen cada 5000ms
+    $('#carouselExampleSlidesOnly').carousel({
+        interval: 10000
+    });
+});
+alert(MessageEvent:'hola');
