@@ -10,3 +10,6 @@ import './styles/app.css';
 
 // start the Stimulus application
 import './bootstrap';
+
+//script of carousel-transition
+import './js/app.js';
