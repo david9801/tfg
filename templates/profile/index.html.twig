@@ -3,7 +3,7 @@
 {% block pagetitle %}{{ controller_name }}{% endblock %}
 
 {% block body %}
-    <div class="container px-4 py-5" id="hanging-icons">
+    <div class="container px-4 py-5 mt-3" id="hanging-icons">
         <h2 class="pb-2 border-bottom">Bienvenido, {{ app.user.name }} {{ app.user.surname }}</h2>
         <a href="{{ path('logout') }}" class="btn btn-danger">
             <i class="bi bi-box-arrow-left"></i> Salir

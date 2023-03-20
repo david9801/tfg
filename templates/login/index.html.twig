@@ -1,16 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Login! {% endblock %}
+{% block title %} Login {% endblock %}
 
 {% block body %}
-
-
-
-
     {% if error %}
         <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
-    <main class="form-signin text-center">
+    <div class="container mt-3">
+    <main class="form-signin text-center" style="margin-top: 80px;">
         <form action="{{ path('login') }}" method="post">
             <img class="mb-4" src="https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_960_720.png" alt="" width="150" height="130">
             <h1 class="h3 mb-3 fw-normal">Por favor, entra aqui!</h1>
@@ -30,7 +27,7 @@
                 </label>
             </div>
             <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-            <p class="mt-5 mb-3 text-muted">© 2022</p>
         </form>
     </main>
+    </div>
 {% endblock %}
