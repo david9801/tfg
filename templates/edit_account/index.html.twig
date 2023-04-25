@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
-{% block title %}Editar Cuenta {% endblock %}
+
+{% block title %}Editar Cuenta{% endblock %}
+
 {% block body %}
     <div class="container col-xl-10 col-xxl-8 px-4 py-5">
         {% for message in app.flashes('success') %}
@@ -10,12 +12,40 @@
         <div class="row text-center p-5">
             <a href="{{ path('profile') }}" class="btn btn-danger w-auto m-auto"><i class="bi bi-arrow-return-left"></i> Volver</a>
         </div>
-        <div class="row align-items-center g-lg-5 py-5">
+        <div class="row align-items-center g-lg-5 py-5 ">
             <div class="col-lg-7 text-center text-lg-start">
-                <h1 class="display-4 fw-bold lh-1 mb-3">Editar cuenta jj</h1>
+                <h1 class="display-4 fw-bold lh-1 mb-3">Editar cuenta</h1>
             </div>
-            <div class="col-md-10 mx-auto col-lg-5" style="table-layout: fixed; width: 100%; border-collapse: collapse; border: 3px solid purple;" >
-                {{ form(form) }}
+            <div class="col-md-10 mx-auto col-lg-5 mt-auto">
+                <div class="card bg-info">
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        <div class="mb-3">
+                            {{ form_label(form.name, 'Nombre', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.surname, 'Apellido', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.surname, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.plainPassword.first, 'Contraseña', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.plainPassword.second, 'Repetir contraseña', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_widget(form.guardar, {'attr': {'class': 'btn btn-success'}}) }}
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
