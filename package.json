@@ -5,7 +5,10 @@
         "@symfony/webpack-encore": "^1.7.0",
         "core-js": "^3.0.0",
         "regenerator-runtime": "^0.13.2",
-        "webpack-notifier": "^1.6.0"
+        "webpack-notifier": "^1.6.0",
+        "@jitsi/js-utils": "^2.1.7",
+        "@jitsi/lib-jitsi-meet": "^3.9.3",
+        "@jitsi/ui": "^1.0.0"
     },
     "license": "UNLICENSED",
     "private": true,
