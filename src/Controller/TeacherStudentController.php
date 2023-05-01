@@ -39,16 +39,7 @@ class TeacherStudentController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() and $form->isValid()){
-            if (!is_null($form->get('plainPassword')->getData())){
-                //if password is set, update
-                // encode the plain password
-                $user->setPassword(
-                    $userPasswordHasher->hashPassword(
-                        $user,
-                        $form->get('plainPassword')->getData()
-                    )
-                );
-            }
+            $this->checkedPassNotNull($form, $user, $userPasswordHasher);
             $entityManager->flush();
 
             $this->addFlash(
@@ -58,13 +49,30 @@ class TeacherStudentController extends AbstractController
             return $this->redirectToRoute('students_admin');
 
         }
-
         return $this->renderForm('teacher/students/edit.html.twig', [
             'controller_name' => 'Teacher',
             'form' => $form,
         ]);
     }
-
+    /**
+     * @param \Symfony\Component\Form\FormInterface $form
+     * @param User $user
+     * @param UserPasswordHasherInterface $userPasswordHasher
+     * @return void
+     */
+    private function checkedPassNotNull(\Symfony\Component\Form\FormInterface $form, User $user, UserPasswordHasherInterface $userPasswordHasher): void
+    {
+        if (!is_null($form->get('plainPassword')->getData())) {
+            //if password is set, update
+            // encode the plain password
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+        }
+    }
     /**
      * @Route("/new", name="student_new")
      */
@@ -109,4 +117,6 @@ class TeacherStudentController extends AbstractController
         $this->addFlash('success', 'Usuario eliminado con exito');
         return $this->redirectToRoute('students_admin');
     }
+
+
 }

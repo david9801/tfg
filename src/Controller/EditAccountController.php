@@ -21,8 +21,25 @@ class EditAccountController extends AbstractController
         $form = $this->createForm(EditStudentFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
-            if (!is_null($form->get('plainPassword')->getData())){
+        $this->checkedFormSubmitted($form, $user, $userPasswordHasher, $entityManager);
+
+        return $this->renderForm('edit_account/index.html.twig', [
+            'controller_name' => 'EditAccountController',
+            'form' => $form,
+        ]);
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormInterface $form
+     * @param \Symfony\Component\Security\Core\User\UserInterface|null $user
+     * @param UserPasswordHasherInterface $userPasswordHasher
+     * @param EntityManagerInterface $entityManager
+     * @return void
+     */
+    private function checkedFormSubmitted(\Symfony\Component\Form\FormInterface $form, ?\Symfony\Component\Security\Core\User\UserInterface $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): void
+    {
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (!is_null($form->get('plainPassword')->getData())) {
                 //if password is set, update
                 // encode the plain password
                 $user->setPassword(
@@ -39,10 +56,5 @@ class EditAccountController extends AbstractController
                 'Cuenta modificada con exito'
             );
         }
-
-        return $this->renderForm('edit_account/index.html.twig', [
-            'controller_name' => 'EditAccountController',
-            'form' => $form,
-        ]);
     }
 }
