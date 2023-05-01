@@ -1,10 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Estudiantes!{% endblock %}
+{% block title %}Estudiantes{% endblock %}
 
 {% block body %}
     <style>
-
         form{
             margin:0 auto;
             width:200px;
@@ -14,14 +13,22 @@
     <div class="container col-xl-10 col-xxl-8 px-4 py-5 mt-3">
         <div class="row align-items-center g-lg-5 py-5">
             <div class="col-lg-7 text-center text-lg-start">
-                <h1 class="display-4 fw-bold lh-1 mb-3">Nuevo alumno</h1>
-                <p class="col-lg-10 fs-4">Introduzca los datos del alumno para registrarlo en la plataforma</p>
-                <p class="col-lg-10 fs-4">Todos los campos son obligatorios</p>
+                <h1 class="display-4 fw-bold lh-1 mb-3">Nuevo alumno:</h1>
+                <p class="col-lg-10 fs-4">Introduzca los datos del alumno para registrarlo en la plataforma.</p>
+                <p class="col-lg-10 fs-4">Todos los campos son obligatorios.</p>
             </div>
             <div class="col-md-10 mx-auto col-lg-5">
-                <h4>
-                {{ form(form) }}
-                </h4>
+                <div class="text-center">
+                    <h4>
+                        <div class="card bg-info">
+                            <div class="card-body mx-auto">
+                                {{ form_start(form) }}
+                                {{ form_widget(form) }}
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
+                    </h4>
+                </div>
             </div>
         </div>
     </div>

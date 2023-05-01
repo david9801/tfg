@@ -10,7 +10,7 @@
             <p class="lead mb-4">Añade y consulta las clases</p>
         </div>
     </div>
-    <div class="row text-center p-5">
+    <div class="row text-center p-5 mt-auto">
         <div class="col-lg-6 col-md-12">
             <a href="{{ path('lessons_admin') }}" class="btn btn-danger"><i class="bi bi-arrow-return-left"></i> Volver</a>
         </div>
@@ -19,7 +19,7 @@
         </div>
     </div>
     {% for message in app.flashes('success') %}
-        <div class="flash-notice bg-success text-center w-50 m-auto">
+        <div class="flash-notice bg-success text-center w-50 mt-auto">
             <i class="bi bi-check-circle-fill"></i> {{ message }} <i class="bi bi-check-circle-fill"></i>
         </div>
     {% endfor %}

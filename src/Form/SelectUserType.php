@@ -20,7 +20,7 @@ class SelectUserType extends AbstractType
                     return $alumno->getName() . ' ' . $alumno->getSurname();
                 }
             ])
-            ->add('Aniadir', SubmitType::class, [
+            ->add('Añadir', SubmitType::class, [
                 'attr' => ['class' => 'btn btn-success'],
             ])
         ;
