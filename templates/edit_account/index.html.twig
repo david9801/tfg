@@ -9,50 +9,43 @@
                 <i class="bi bi-check-circle-fill"></i> {{ message }} <i class="bi bi-check-circle-fill"></i>
             </div>
         {% endfor %}
-        <div class="row text-center p-5">
+        <div class="row text-center py-3">
             <a href="{{ path('profile') }}" class="btn btn-danger w-auto m-auto"><i class="bi bi-arrow-return-left"></i> Volver</a>
         </div>
-        <div class="container px-4 py-5">
-            <div class="row align-items-center g-lg-5 py-5">
+        <div class="container px-4">
+            <div class="row align-items-center g-lg-5 my-2">
                 <div class="col-md-8 mx-auto col-lg-6">
-                    <h1 class="display-4 fw-bold lh-1 mb-3 ">Editar cuenta</h1>
+                    <h1 class="display-4 fw-bold lh-1 mb-3">Editar cuenta</h1>
                     <div class="card bg-info w-100">
                         <div class="card-body">
-                        {{ form_start(form) }}
-
-                        <div class="mb-3">
-                            {{ form_label(form.name, 'Nombre', {'label_attr': {'class': 'form-label'}}) }}
-                            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_start(form) }}
+                            <div class="mb-3">
+                                {{ form_label(form.name, 'Nombre', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form.surname, 'Apellido', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.surname, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form.plainPassword.first, 'Contraseña', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_label(form.plainPassword.second, 'Repetir contraseña', {'label_attr': {'class': 'form-label'}}) }}
+                                {{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_widget(form.guardar, {'attr': {'class': 'btn btn-success'}}) }}
+                            </div>
+                            {{ form_end(form) }}
                         </div>
-
-                        <div class="mb-3">
-                            {{ form_label(form.surname, 'Apellido', {'label_attr': {'class': 'form-label'}}) }}
-                            {{ form_widget(form.surname, {'attr': {'class': 'form-control'}}) }}
-                        </div>
-
-                        <div class="mb-3">
-                            {{ form_label(form.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
-                            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-                        </div>
-
-                        <div class="mb-3">
-                            {{ form_label(form.plainPassword.first, 'Contraseña', {'label_attr': {'class': 'form-label'}}) }}
-                            {{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
-                        </div>
-
-                        <div class="mb-3">
-                            {{ form_label(form.plainPassword.second, 'Repetir contraseña', {'label_attr': {'class': 'form-label'}}) }}
-                            {{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
-                        </div>
-
-                        <div class="mb-3">
-                            {{ form_widget(form.guardar, {'attr': {'class': 'btn btn-success'}}) }}
-                        </div>
-
-                        {{ form_end(form) }}
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
