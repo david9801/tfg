@@ -64,7 +64,19 @@ class TeacherTeamController extends AbstractController
         $form = $this->createForm(TeamType::class, $team);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        $this->newFormIsValid($form, $team, $entityManager);
+        return $this->redirectToRoute('teams_admin');
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormInterface $form
+     * @param Team $team
+     * @param EntityManagerInterface $entityManager
+     * @return void
+     */
+    private function newFormIsValid(\Symfony\Component\Form\FormInterface $form, Team $team, EntityManagerInterface $entityManager): void
+    {
+        if ($form->isSubmitted() && $form->isValid()) {
             $team->setOwner($this->getUser());
             $entityManager->persist($team);
             $entityManager->flush();
@@ -72,10 +84,7 @@ class TeacherTeamController extends AbstractController
                 'success',
                 'Equipo añadido con exito'
             );
-
-
         }
-        return $this->redirectToRoute('teams_admin');
     }
 
     /**
@@ -92,11 +101,26 @@ class TeacherTeamController extends AbstractController
     /**
      * @Route("/students/{id}", name="team_students")
      */
-    public function students(Team $team, Request $request, EntityManagerInterface $entityManager): Response
+    public function students(Team $team, Request $request, EntityManagerInterface $entityManager): ?Response
     {
         $form = $this->createForm(SelectUserType::class);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()){
+        $this->formIsValid($form, $team, $entityManager);
+        return $this->renderForm('teacher/teams/students.html.twig', [
+            'controller_name' => 'Estudiantes',
+            'form' => $form,
+            'team' => $team,
+        ]);
+    }
+    /**
+     * @param \Symfony\Component\Form\FormInterface $form
+     * @param Team $team
+     * @param EntityManagerInterface $entityManager
+     * @return void
+     */
+    private function formIsValid(\Symfony\Component\Form\FormInterface $form, Team $team, EntityManagerInterface $entityManager): void
+    {
+        if ($form->isSubmitted() && $form->isValid()) {
             $team->addStudent($form->get('alumno')->getData());
             $entityManager->flush();
             $this->addFlash(
@@ -104,12 +128,6 @@ class TeacherTeamController extends AbstractController
                 'Alumno añadido al equipo'
             );
         }
-
-        return $this->renderForm('teacher/teams/students.html.twig', [
-            'controller_name' => 'Estudiantes',
-            'form' => $form,
-            'team' => $team,
-        ]);
     }
 
     /**
@@ -125,4 +143,5 @@ class TeacherTeamController extends AbstractController
         );
         return $this->redirectToRoute('team_students', ['id' => $team->getId()]);
     }
+
 }
