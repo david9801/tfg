@@ -74,7 +74,7 @@ class TeacherLessonController extends AbstractController
     {
         $form = $this->createForm(LessonType::class, $lesson);
         $form->handleRequest($request);
-
+        //dd($form->getData());
         if ($form->isSubmitted() && $form->isValid()){
             $entityManager->flush();
             $this->addFlash(
