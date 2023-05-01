@@ -101,33 +101,27 @@ class TeacherTeamController extends AbstractController
     /**
      * @Route("/students/{id}", name="team_students")
      */
-    public function students(Team $team, Request $request, EntityManagerInterface $entityManager): ?Response
+    public function students(Team $team, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(SelectUserType::class);
-        $form->handleRequest($request);
-        $this->formIsValid($form, $team, $entityManager);
-        return $this->renderForm('teacher/teams/students.html.twig', [
-            'controller_name' => 'Estudiantes',
-            'form' => $form,
+        $user = $this->getUser();
+        $members = $this->getMembersOfTeam($team, $user);
+        return $this->render('teams/membersWithOutOwner.html.twig', [
+            'controller_name' => 'Alumnos',
             'team' => $team,
+            'members' => $members,
         ]);
     }
     /**
-     * @param \Symfony\Component\Form\FormInterface $form
      * @param Team $team
-     * @param EntityManagerInterface $entityManager
-     * @return void
+     * @param $user
+     * @return \Doctrine\Common\Collections\Collection
      */
-    private function formIsValid(\Symfony\Component\Form\FormInterface $form, Team $team, EntityManagerInterface $entityManager): void
+    private function getMembersOfTeam(Team $team, $user): \Doctrine\Common\Collections\Collection
     {
-        if ($form->isSubmitted() && $form->isValid()) {
-            $team->addStudent($form->get('alumno')->getData());
-            $entityManager->flush();
-            $this->addFlash(
-                'success',
-                'Alumno añadido al equipo'
-            );
-        }
+        $members = $team->getStudents()->filter(function ($student) use ($user) {
+            return $student !== $user;
+        });
+        return $members;
     }
 
     /**

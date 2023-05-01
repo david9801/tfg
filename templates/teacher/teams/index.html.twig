@@ -8,7 +8,7 @@
             <img class="d-block mx-auto mb-4" src="http://www.planesdeformacion.es/wp-content/uploads/2015/03/trabajo_en_equipo.jpg" alt="" width="190" height="130">
             <h1 class="display-5 fw-bold">Gestión de equipos</h1>
             <div class="col-lg-6 mx-auto">
-                <p class="lead mb-4">Consulta, modifica y crea nuevos equipos para la plataforma</p>
+                <p class="lead mb-4">Consulta, modifica y crea nuevos equipos para la plataforma.</p>
             </div>
             <div class="row text-center p-5">
                 <a href="{{ path('profile') }}" class="btn btn-danger w-auto m-auto"><i class="bi bi-arrow-return-left"></i> Volver</a>
@@ -43,7 +43,7 @@
                         <td>{{ team.name }}</td>
                         <td><a href="{{ path('team_edit', {id: team.id}) }}" class="btn btn-warning">Renombrar</a></td>
                         <td><a href="{{ path('team_delete', {id: team.id}) }}" class="btn btn-danger">Borrar</a></td>
-                        <td><a href="{{ path('team_members', {id: team.id}) }}" class="btn btn-primary">Alumnos</a></td>
+                        <td><a href="{{ path('team_students', {id: team.id}) }}" class="btn btn-primary">Alumnos</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
