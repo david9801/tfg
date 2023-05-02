@@ -2,15 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Lesson;
-use App\Entity\Team;
-use App\Form\LessonType;
-use App\Repository\LessonRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -42,8 +40,13 @@ class RaspberryController extends AbstractController
     /**
      * @Route("/index/actions/On", name="raspberry_turnON")
      */
-    public function turnOnLed(): Response
+    public function turnOnLed(Request $request): Response
     {
+        $process = new Process(['python3', realpath($this->getParameter('kernel.project_dir')) . '/src/Python/led.py', 'turn_on']);
+        $process->run();
+
+        $this->processNotSucessfull($process);
+
         return $this->render('raspberry/options.html.twig', [
             'controller_name' => 'Clases',
         ]);
@@ -52,11 +55,27 @@ class RaspberryController extends AbstractController
     /**
      * @Route("/index/actions/Off", name="raspberry_turnOFF")
      */
-    public function shutDownLed(): Response
+    public function turnOffLed(Request $request): Response
     {
+        $process = new Process(['python3', realpath($this->getParameter('kernel.project_dir')) . '/src/Python/led.py', 'turn_off']);
+        $process->run();
+
+        $this->processNotSucessfull($process);
+
         return $this->render('raspberry/options.html.twig', [
             'controller_name' => 'Clases',
         ]);
+    }
+
+    /**
+     * @param Process $process
+     * @return void
+     */
+    private function processNotSucessfull(Process $process): void
+    {
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
     }
 
 }
