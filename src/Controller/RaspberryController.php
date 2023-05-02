@@ -43,17 +43,14 @@ class RaspberryController extends AbstractController
     public function turnOnLed(Request $request): Response
     {
         try {
-            $process = new Process(['python3', realpath($this->getParameter('kernel.project_dir')) . '/src/Python/led.py', 'turn_on']);
+            $process = Process::fromShellCommandline('sudo python /home/pi/Desktop/iot/aws-iot-device-sdk-python-v2/samples/pubsub.py turn_on');
             $process->run();
             $this->processNotSucessfull($process);
-            return $this->render('raspberry/options.html.twig', [
-                'controller_name' => 'Clases',
-            ]);
+            return $this->redirectToRoute('raspberry_funcionalidades');
         } catch (\Exception $e) {
             return $this->returnError();
         }
     }
-
 
     /**
      * @Route("/index/actions/Off", name="raspberry_turnOFF")
@@ -61,12 +58,10 @@ class RaspberryController extends AbstractController
     public function turnOffLed(Request $request): Response
     {
         try {
-            $process = new Process(['python3', realpath($this->getParameter('kernel.project_dir')) . '/src/Python/led.py', 'turn_off']);
+            $process = Process::fromShellCommandline('sudo python /home/pi/Desktop/iot/aws-iot-device-sdk-python-v2/samples/pubsub.py turn_on');
             $process->run();
             $this->processNotSucessfull($process);
-            return $this->render('raspberry/options.html.twig', [
-                'controller_name' => 'Clases',
-            ]);
+            return $this->redirectToRoute('raspberry_funcionalidades');
         } catch (\Exception $e) {
             return $this->returnErrorOff();
         }
@@ -78,7 +73,6 @@ class RaspberryController extends AbstractController
      */
     private function processNotSucessfull(Process $process): void
     {
-        //dd($process);
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
@@ -105,5 +99,4 @@ class RaspberryController extends AbstractController
             'error' => $errorMessage,
         ]);
     }
-
 }
