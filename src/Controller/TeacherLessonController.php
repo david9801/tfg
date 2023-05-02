@@ -81,7 +81,7 @@ class TeacherLessonController extends AbstractController
                 'success',
                 'Clase modificada con exito'
             );
-            return $this->redirectToRoute('lessons_team', ['id' => $lesson->getTeam()->getId()]);
+            return $this->redirectToRoute('lessons_team_admin', ['id' => $lesson->getTeam()->getId()]);
         }
 
         return $this->renderForm('teacher/lessons/edit.html.twig', [
