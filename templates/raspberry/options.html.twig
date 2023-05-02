@@ -3,12 +3,36 @@
 {% block title %}Raspberry Options{% endblock %}
 
 {% block body %}
-
-    <div class="mt-5">
-        <p>Ahora mismo tenemos disponibles encender/apagar un LED.</p>
-        <a href="{{ path('raspberry_turnON') }}" class="btn btn-success mt-3">Encender</a>
-        <a href="{{ path('raspberry_turnOFF') }}" class="btn btn-success mt-3">Apagar</a>
+    <div class="container mt-5">
+        <div class="row justify-content-center mt-5">
+            <h2 class="mb-4 mt-3">Opciones de Raspberry</h2>
+            <div class="col-sm-6 col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Encender LED</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Haz clic en el botón para encender el LED.</p>
+                        <a href="{{ path('raspberry_turnON') }}" class="btn btn-success">Encender</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">Apagar LED</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Haz clic en el botón para apagar el LED.</p>
+                        <a href="{{ path('raspberry_turnOFF') }}" class="btn btn-danger">Apagar</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <a href="{{ path('profile') }}" class="btn btn-danger w-auto m-auto"><i class="bi bi-arrow-return-left"></i> Volver</a>
+                </div>
+            </div>
+        </div>
     </div>
-
 {% endblock %}
-
