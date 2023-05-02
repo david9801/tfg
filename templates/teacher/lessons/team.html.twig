@@ -3,48 +3,51 @@
 {% block pagetitle %}{{ controller_name }}{% endblock %}
 
 {% block body %}
-    <div class="px-4 py-5 my-5 text-center mt-3">
-        <img class="d-block mx-auto mb-4" src="http://www.planesdeformacion.es/wp-content/uploads/2015/03/trabajo_en_equipo.jpg" alt="" width="190" height="130">
-        <h1 class="display-5 fw-bold">{{team.name}}</h1>
-        <div class="col-lg-6 mx-auto">
-            <p class="lead mb-4">Añade y consulta las clases</p>
+    <div class="container">
+        <div class="px-4 py-5 my-5 text-center mt-3">
+            <img class="d-block mx-auto mb-4" src="http://www.planesdeformacion.es/wp-content/uploads/2015/03/trabajo_en_equipo.jpg" alt="" width="190" height="130">
+            <h1 class="display-5 fw-bold">{{team.name}}</h1>
+            <div class="col-lg-6 mx-auto">
+                <p class="lead mb-4">Añade y consulta las clases</p>
+            </div>
+
+            <div class="row text-center p-5 mt-auto">
+                <div class="col-lg-6 col-md-12">
+                    <a href="{{ path('lessons_admin') }}" class="btn btn-danger"><i class="bi bi-arrow-return-left"></i> Volver</a>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <a href="{{ path('new_lesson', {id : team.id}) }}" class="btn btn-success"><i class="bi bi-person-plus-fill"></i> Nueva clase</a>
+                </div>
+            </div>
+            {% for message in app.flashes('success') %}
+                <div class="flash-notice bg-success text-center w-50 mt-auto">
+                    <i class="bi bi-check-circle-fill"></i> {{ message }} <i class="bi bi-check-circle-fill"></i>
+                </div>
+            {% endfor %}
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col"><i class="bi bi-book-half"></i> Titulo</th>
+                    <th scope="col"><i class="bi bi-calendar-event"></i> Comienzo</th>
+                    <th scope="col"><i class="bi bi-calendar-event-fill"></i> Final</th>
+                    <th scope="col"><i class="bi bi-pencil-fill"></i> Editar</th>
+                    <th scope="col"><i class="bi bi-trash-fill"></i> Borrar</th>
+                    <th scope="col"><i class="bi bi-camera-video-fill"></i> Unirse</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for lesson in team.lessons %}
+                    <tr>
+                        <td>{{ lesson.title }}</td>
+                        <td>{{ lesson.startdate | date("d/m/Y") }} a las {{ lesson.starttime | date("H:i") }}</td>
+                        <td>{{ lesson.enddate | date("d/m/Y") }} a las {{ lesson.endtime | date("H:i") }}</td>
+                        <td><a href="{{ path('edit_lesson', {id: lesson.id}) }}" class="btn btn-warning">Editar</a></td>
+                        <td><a href="{{ path('delete_lesson', {id: lesson.id}) }}" class="btn btn-danger">Borrar</a></td>
+                        <td><a href="{{ path('enter_lesson_admin', {id: lesson.id}) }}" class="btn btn-success">Unirse</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
-    <div class="row text-center p-5 mt-auto">
-        <div class="col-lg-6 col-md-12">
-            <a href="{{ path('lessons_admin') }}" class="btn btn-danger"><i class="bi bi-arrow-return-left"></i> Volver</a>
-        </div>
-        <div class="col-lg-6 col-md-12">
-            <a href="{{ path('new_lesson', {id : team.id}) }}" class="btn btn-success"><i class="bi bi-person-plus-fill"></i> Nueva clase</a>
-        </div>
-    </div>
-    {% for message in app.flashes('success') %}
-        <div class="flash-notice bg-success text-center w-50 mt-auto">
-            <i class="bi bi-check-circle-fill"></i> {{ message }} <i class="bi bi-check-circle-fill"></i>
-        </div>
-    {% endfor %}
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col"><i class="bi bi-book-half"></i> Titulo</th>
-            <th scope="col"><i class="bi bi-calendar-event"></i> Comienzo</th>
-            <th scope="col"><i class="bi bi-calendar-event-fill"></i> Final</th>
-            <th scope="col"><i class="bi bi-pencil-fill"></i> Editar</th>
-            <th scope="col"><i class="bi bi-trash-fill"></i> Borrar</th>
-            <th scope="col"><i class="bi bi-camera-video-fill"></i> Unirse</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for lesson in team.lessons %}
-            <tr>
-               <td>{{ lesson.title }}</td>
-               <td>{{ lesson.startdate | date("d/m/Y") }} a las {{ lesson.starttime | date("H:i") }}</td>
-               <td>{{ lesson.enddate | date("d/m/Y") }} a las {{ lesson.endtime | date("H:i") }}</td>
-                <td><a href="{{ path('edit_lesson', {id: lesson.id}) }}" class="btn btn-warning">Editar</a></td>
-                <td><a href="{{ path('delete_lesson', {id: lesson.id}) }}" class="btn btn-danger">Borrar</a></td>
-                <td><a href="{{ path('enter_lesson_admin', {id: lesson.id}) }}" class="btn btn-success">Unirse</a></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 {% endblock %}
