@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Raspberry{% endblock %}
+
+{% block body %}
+
+    <div class="mt-5">
+        <p>Desde aquí puedes controlar los pines de tu Raspberry Pi 4B. Pulsa en "Ver funcionalidades" para ver las opciones disponibles en este momento.</p>
+        <a href="{{ path('raspberry_funcionalidades') }}" class="btn btn-success mt-3">Ver funcionalidades</a>
+    </div>
+
+{% endblock %}
+

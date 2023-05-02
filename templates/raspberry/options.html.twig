@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Raspberry Options{% endblock %}
+
+{% block body %}
+
+    <div class="mt-5">
+        <p>Ahora mismo tenemos disponibles encender/apagar un LED.</p>
+        <a href="{{ path('raspberry_turnON') }}" class="btn btn-success mt-3">Encender</a>
+        <a href="{{ path('raspberry_turnOFF') }}" class="btn btn-success mt-3">Apagar</a>
+    </div>
+
+{% endblock %}
+
