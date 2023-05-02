@@ -50,10 +50,7 @@ class RaspberryController extends AbstractController
                 'controller_name' => 'Clases',
             ]);
         } catch (\Exception $e) {
-            $errorMessage = "No se ha podido encender el LED. La conexión con la Raspberry Pi no está disponible en este momento.";
-            return $this->render('raspberry/options.html.twig', [
-                'error' => $errorMessage,
-            ]);
+            return $this->returnError();
         }
     }
 
@@ -71,10 +68,7 @@ class RaspberryController extends AbstractController
                 'controller_name' => 'Clases',
             ]);
         } catch (\Exception $e) {
-            $errorMessage = "No se ha podido apagar el LED. La conexión con la Raspberry Pi no está disponible en este momento.";
-            return $this->render('raspberry/options.html.twig', [
-                'error' => $errorMessage,
-            ]);
+            return $this->returnErrorOff();
         }
     }
 
@@ -88,6 +82,28 @@ class RaspberryController extends AbstractController
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
+    }
+
+    /**
+     * @return Response
+     */
+    private function returnError(): Response
+    {
+        $errorMessage = "No se ha podido encender el LED. La conexión con la Raspberry Pi no está disponible en este momento.";
+        return $this->render('raspberry/options.html.twig', [
+            'error' => $errorMessage,
+        ]);
+    }
+
+    /**
+     * @return Response
+     */
+    private function returnErrorOff(): Response
+    {
+        $errorMessage = "No se ha podido apagar el LED. La conexión con la Raspberry Pi no está disponible en este momento.";
+        return $this->render('raspberry/options.html.twig', [
+            'error' => $errorMessage,
+        ]);
     }
 
 }
