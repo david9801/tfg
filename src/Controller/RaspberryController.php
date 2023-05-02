@@ -42,29 +42,40 @@ class RaspberryController extends AbstractController
      */
     public function turnOnLed(Request $request): Response
     {
-        $process = new Process(['python3', realpath($this->getParameter('kernel.project_dir')) . '/src/Python/led.py', 'turn_on']);
-        $process->run();
-
-        $this->processNotSucessfull($process);
-
-        return $this->render('raspberry/options.html.twig', [
-            'controller_name' => 'Clases',
-        ]);
+        try {
+            $process = new Process(['python3', realpath($this->getParameter('kernel.project_dir')) . '/src/Python/led.py', 'turn_on']);
+            $process->run();
+            $this->processNotSucessfull($process);
+            return $this->render('raspberry/options.html.twig', [
+                'controller_name' => 'Clases',
+            ]);
+        } catch (\Exception $e) {
+            $errorMessage = "No se ha podido encender el LED. La conexión con la Raspberry Pi no está disponible en este momento.";
+            return $this->render('raspberry/options.html.twig', [
+                'error' => $errorMessage,
+            ]);
+        }
     }
+
 
     /**
      * @Route("/index/actions/Off", name="raspberry_turnOFF")
      */
     public function turnOffLed(Request $request): Response
     {
-        $process = new Process(['python3', realpath($this->getParameter('kernel.project_dir')) . '/src/Python/led.py', 'turn_off']);
-        $process->run();
-
-        $this->processNotSucessfull($process);
-
-        return $this->render('raspberry/options.html.twig', [
-            'controller_name' => 'Clases',
-        ]);
+        try {
+            $process = new Process(['python3', realpath($this->getParameter('kernel.project_dir')) . '/src/Python/led.py', 'turn_off']);
+            $process->run();
+            $this->processNotSucessfull($process);
+            return $this->render('raspberry/options.html.twig', [
+                'controller_name' => 'Clases',
+            ]);
+        } catch (\Exception $e) {
+            $errorMessage = "No se ha podido apagar el LED. La conexión con la Raspberry Pi no está disponible en este momento.";
+            return $this->render('raspberry/options.html.twig', [
+                'error' => $errorMessage,
+            ]);
+        }
     }
 
     /**
@@ -73,6 +84,7 @@ class RaspberryController extends AbstractController
      */
     private function processNotSucessfull(Process $process): void
     {
+        //dd($process);
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
