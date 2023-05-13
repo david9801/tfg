@@ -13,6 +13,7 @@ Aplicación Symfony para servicio de videoconferencias para una plataforma de e-
 8. Execute migration: `php bin/console doctrine:migrations:migrate`.
 9. Start your server.
 10. You need to create fixtures in your DB.
+11. Read de license
 
 ## Tests:
 Run: `php bin/phpunit`.
