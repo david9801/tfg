@@ -52,12 +52,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $surname;
 
     /**
-     * @ORM\OneTomany(mappedBy="owner", targetEntity="App\Entity\Team")
+     * @ORM\OneToMany(mappedBy="owner", targetEntity="App\Entity\Team")
      */
     private $ownerteams;
 
     /**
-     * @ORM\ManyTomany(targetEntity="App\Entity\Team", mappedBy="students")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Team", mappedBy="students")
      */
     private $teams;
 
