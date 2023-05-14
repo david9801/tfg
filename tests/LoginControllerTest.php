@@ -20,7 +20,6 @@ class LoginControllerTest extends WebTestCase
     /**
      * @Route("/login", name="login")
      * @Route("/profile", name="profile")
-
      */
     public function testIsLoggedIn()
     {
@@ -48,13 +47,4 @@ class LoginControllerTest extends WebTestCase
     }
 
 }
-
-
-
-
-
-// Verificamos que se haya iniciado sesión correctamente
-//$this->assertEquals(500, $client->getResponse()->getStatusCode());
-
-//Comprobamos que estamos logueados
 
