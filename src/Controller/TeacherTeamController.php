@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Team;
-use App\Form\SelectUserType;
 use App\Form\TeamType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
