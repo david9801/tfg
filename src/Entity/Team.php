@@ -128,4 +128,16 @@ class Team
 
         return $this;
     }
+
+    /**
+     * Obtener el equipo por su nombre
+     *
+     * @param string $name
+     * @param EntityManagerInterface $entityManager
+     * @return Team|null
+     */
+    public static function getByName(string $name, EntityManagerInterface $entityManager): ?self
+    {
+        return $entityManager->getRepository(self::class)->findOneBy(['name' => $name]);
+    }
 }

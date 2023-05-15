@@ -29,43 +29,6 @@ class LoginControllerTest extends WebTestCase
             $crawler->filter('html:contains("Bienvenido,")')->count()
         );
     }
-
-
-    /**
-     * @return array
-     */
-    private function loginTestClient(): array
-    {
-        // Creamos el cliente
-        $client = static::createClient();
-        $client->enableProfiler();
-        $container = self::$container;
-        $url = $container->get('router')->generate('login');
-
-        //Accedemos a la pagina de inicio de sesion
-        $crawler = $client->request('GET', $url);
-        $this->assertResponseIsSuccessful();
-        $this->formWriteTest($crawler, $client);
-        return array($client, $container, $crawler);
-    }
-
-
-
-    /**
-     * @param \Symfony\Component\DomCrawler\Crawler|null $crawler
-     * @param \Symfony\Bundle\FrameworkBundle\KernelBrowser $client
-     * @return void
-     */
-    private function formWriteTest(?\Symfony\Component\DomCrawler\Crawler $crawler, \Symfony\Bundle\FrameworkBundle\KernelBrowser $client): void
-    {
-        //iniciamos sesion como profesor con las credenciales de uno ya creado
-        $form = $crawler->selectButton('Sign in')->form();
-        $form['_username'] = 'uo257729@uniovi.es';
-        $form['_password'] = '123456';
-        $client->submit($form);
-    }
-
-
     /**
      * @Route("/", name="index")
      * @Route("/login", name="login")
@@ -94,6 +57,37 @@ class LoginControllerTest extends WebTestCase
 
     }
 
+    /**
+     * @return array
+     */
+    private function loginTestClient(): array
+    {
+        // Creamos el cliente
+        $client = static::createClient();
+        $client->enableProfiler();
+        $container = self::$container;
+        $url = $container->get('router')->generate('login');
+
+        //Accedemos a la pagina de inicio de sesion
+        $crawler = $client->request('GET', $url);
+        $this->assertResponseIsSuccessful();
+        $this->formWriteTest($crawler, $client);
+        return array($client, $container, $crawler);
+    }
+
+    /**
+     * @param \Symfony\Component\DomCrawler\Crawler|null $crawler
+     * @param \Symfony\Bundle\FrameworkBundle\KernelBrowser $client
+     * @return void
+     */
+    private function formWriteTest(?\Symfony\Component\DomCrawler\Crawler $crawler, \Symfony\Bundle\FrameworkBundle\KernelBrowser $client): void
+    {
+        //iniciamos sesion como profesor con las credenciales de uno ya creado
+        $form = $crawler->selectButton('Sign in')->form();
+        $form['_username'] = 'uo257729@uniovi.es';
+        $form['_password'] = '123456';
+        $client->submit($form);
+    }
 
 }
 
