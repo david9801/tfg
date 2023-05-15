@@ -21,25 +21,19 @@ class TeacherTeamControllerTest extends WebTestCase
      * @Route("", name="teams_admin")
      * @Route("/new", name="team_new")
      */
-    public function testNewTeam()
+    public function testNewTeam():void
     {
         list($client, $container, $crawler) = $this->loginTestClient();
 
-        // vista que retorna el form de crear teams
         $crawler = $client->request('GET', $container->get('router')->generate('teams_admin'));
         // vista funciona
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        // Obtener el formulario de creación de equipo
         $form = $crawler->filter('form[name="team"]')->form();
-        //dd($form);
-        // Verificar que solo hay un formulario en la página
         $this->assertCount(1, [$form]);
 
-        // Llenar el formulario con los datos del nuevo equipo
         $form['team[name]'] = 'Equipo de prueba';
 
-        // Enviar el formulario
         $crawler = $client->submit($form);
 
         // Verificar que la respuesta HTTP es 302 (redirección)
@@ -89,7 +83,6 @@ class TeacherTeamControllerTest extends WebTestCase
         $form['_password'] = '123456';
         $client->submit($form);
     }
-
 
 }
 
