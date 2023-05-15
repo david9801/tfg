@@ -53,6 +53,42 @@ class TeacherTeamControllerTest extends WebTestCase
     }
 
     /**
+     * @Route("/login", name="login")
+     * @Route("", name="teams_admin")
+     * @Route("/delete/{id}", name="team_delete")
+     */
+    public function testDeleteNewTeam(): void
+    {
+        list($client, $container, $crawler) = $this->loginTestClient();
+
+        $teamToDelete = $this->getTeamByName($client, 'Equipo de prueba');
+        $this->assertNotNull($teamToDelete);
+
+        $deleteUrl = $container->get('router')->generate('team_delete', ['id' => $teamToDelete->getId()]);
+        $crawler = $client->request('GET', $deleteUrl);
+        $this->assertTrue($client->getResponse()->isRedirect('/team/teams'));
+
+        $crawler = $client->request('GET', $container->get('router')->generate('teams_admin'));
+
+        $this->assertCount(0, $crawler->filter('table.table tbody tr td:contains("Equipo de prueba")'));
+    }
+
+    /**
+     * Obtener el equipo por su nombre
+     * @param \Symfony\Bundle\FrameworkBundle\KernelBrowser $client
+     * @param string $teamName
+     * @return \App\Entity\Team|null
+     */
+    private function getTeamByName(\Symfony\Bundle\FrameworkBundle\KernelBrowser $client, string $teamName): ?\App\Entity\Team
+    {
+        $em = $client->getContainer()->get('doctrine')->getManager();
+        $repository = $em->getRepository(\App\Entity\Team::class);
+        return $repository->findOneBy(['name' => $teamName]);
+    }
+
+
+
+    /**
      * @return array
      */
     private function loginTestClient(): array
