@@ -4,7 +4,7 @@ namespace App\Tests;
 
 use Symfony\Component\Routing\Annotation\Route;
 
-class TeacherLessonControllerTest extends BaseTestCase
+final class TeacherLessonControllerTest extends BaseTestCase
 {
 
     /**
