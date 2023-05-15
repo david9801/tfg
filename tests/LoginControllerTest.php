@@ -2,19 +2,10 @@
 
 namespace App\Tests;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Routing\Annotation\Route;
 
-class LoginControllerTest extends WebTestCase
+class LoginControllerTest extends BaseTestCase
 {
-
-    /**
-     * @return \Symfony\Component\HttpKernel\KernelInterface
-     */
-    protected static function createKernel(array $options = [])
-    {
-        return new \App\Kernel('test', true);
-    }
 
     /**
      * @Route("/login", name="login")
@@ -55,38 +46,6 @@ class LoginControllerTest extends WebTestCase
             $crawler->filter('h1:contains("Por favor, entra aqui!")')->count()
         );
 
-    }
-
-    /**
-     * @return array
-     */
-    private function loginTestClient(): array
-    {
-        // Creamos el cliente
-        $client = static::createClient();
-        $client->enableProfiler();
-        $container = self::$container;
-        $url = $container->get('router')->generate('login');
-
-        //Accedemos a la pagina de inicio de sesion
-        $crawler = $client->request('GET', $url);
-        $this->assertResponseIsSuccessful();
-        $this->formWriteTest($crawler, $client);
-        return array($client, $container, $crawler);
-    }
-
-    /**
-     * @param \Symfony\Component\DomCrawler\Crawler|null $crawler
-     * @param \Symfony\Bundle\FrameworkBundle\KernelBrowser $client
-     * @return void
-     */
-    private function formWriteTest(?\Symfony\Component\DomCrawler\Crawler $crawler, \Symfony\Bundle\FrameworkBundle\KernelBrowser $client): void
-    {
-        //iniciamos sesion como profesor con las credenciales de uno ya creado
-        $form = $crawler->selectButton('Sign in')->form();
-        $form['_username'] = 'uo257729@uniovi.es';
-        $form['_password'] = '123456';
-        $client->submit($form);
     }
 
 }
