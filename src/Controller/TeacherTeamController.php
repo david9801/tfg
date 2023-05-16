@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 /**
  * @Route("/team/teams")
  */
@@ -175,29 +176,52 @@ class TeacherTeamController extends AbstractController
             }
         }
 
-        return $this->render('teacher/teams/notes.html.twig', [
+        return $this->render('notes/notes.html.twig', [
             'controller_name' => 'Gestión de Equipos',
             'id' => $id,
         ]);
     }
     /**
-     * @Route("/showfiles", name="team_file")
+     * @Route("/showfiles/{id}", name="team_file")
      */
-    public function showFiles(): Response
+    public function showFiles($id): Response
     {
 
-        $directory = $this->getParameter('kernel.project_dir') . '/public/files';
-
+        $directory = $this->getParameter('kernel.project_dir') . '/public/uploads';
         $files = [];
         if (is_dir($directory)) {
-            $files = array_diff(scandir($directory), ['.', '..']);
+            $files = scandir($directory);
+            $files = array_filter($files, function($file) use ($directory) {
+                return is_file($directory . '/' . $file);
+            });
+
         }
 
         return $this->render('notes/index.html.twig', [
             'controller_name' => 'Gestión de Equipos',
             'files' => $files,
+            'id' => $id,
         ]);
     }
 
+    /**
+     * @Route("/download/{filename}", name="download_file")
+     */
+    public function downloadFile($filename):Response
+    {
+        $filePath = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $filename;
+
+        if (!file_exists($filePath)) {
+            throw $this->createNotFoundException('El archivo no existe.');
+        }
+
+        $response = new BinaryFileResponse($filePath);
+
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
+
+        $response->headers->set('Content-Type', 'application/octet-stream');
+
+        return $response;
+    }
 
 }
