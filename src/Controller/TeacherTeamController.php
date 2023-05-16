@@ -160,7 +160,7 @@ class TeacherTeamController extends AbstractController
             $file = $request->files->get('file');
 
             if ($file instanceof UploadedFile) {
-                $allowedExtensions = ['ppt', 'pptx', 'pdf'];
+                $allowedExtensions = ['ppt', 'pptx', 'pdf','xlsx', 'xls', 'docx'];
                 $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                 $extension = $file->guessExtension();
 
@@ -171,7 +171,7 @@ class TeacherTeamController extends AbstractController
                     $file->move($uploadsDirectory, $newFilename);
                     $this->addFlash('success', 'Archivo subido exitosamente.');
                 } else {
-                    $this->addFlash('error', 'Solo se permiten archivos PPT, PPTX y PDF.');
+                    $this->addFlash('error', 'Archivo NO permitido');
                 }
             }
         }
