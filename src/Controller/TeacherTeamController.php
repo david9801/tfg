@@ -145,7 +145,6 @@ class TeacherTeamController extends AbstractController
     public function uploadFilesView($id): Response
     {
         return $this->renderForm('notes/notes.html.twig', [
-            'controller_name' => 'Gestion de Equipos',
             'id' => $id
         ]);
 
@@ -182,7 +181,6 @@ class TeacherTeamController extends AbstractController
         }
 
         return $this->render('notes/notes.html.twig', [
-            'controller_name' => 'Gestión de Equipos',
             'id' => $id,
         ]);
     }
@@ -205,7 +203,6 @@ class TeacherTeamController extends AbstractController
         }
 
         return $this->render('notes/index.html.twig', [
-            'controller_name' => 'Gestión de Equipos',
             'files' => $files,
             'id' => $id,
         ]);
