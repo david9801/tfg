@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block pagetitle %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="px-4 py-5 my-5 text-center mt-3">
+            <img class="d-block mx-auto mb-4" src="http://www.planesdeformacion.es/wp-content/uploads/2015/03/trabajo_en_equipo.jpg" alt="" width="190" height="130">
+            <h1 class="display-5 fw-bold">Gestión de equipos</h1>
+            <div class="col-lg-6 mx-auto">
+                <p class="lead mb-4">Estos son los apuntes de la asignatura.</p>
+            </div>
+            <div class="row text-center p-5">
+                <a href="{{ path('profile') }}" class="btn btn-danger w-auto m-auto"><i class="bi bi-arrow-return-left"></i> Volver</a>
+            </div>
+            {% for message in app.flashes('success') %}
+                <div class="flash-notice bg-success text-center w-50 m-auto">
+                    <i class="bi bi-check-circle-fill"></i> {{ message }} <i class="bi bi-check-circle-fill"></i>
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('error') %}
+                <div class="flash-notice bg-danger text-center w-50 m-auto">
+                    <i class="bi bi-exclamation-circle"></i> {{ message }} <i class="bi bi-exclamation-circle"></i>
+                </div>
+            {% endfor %}
+
+            <div class="row mt-5">
+                <div class="col-lg-8 offset-lg-2">
+                    {% if files is not empty %}
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Lista de archivos</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                {% for file in files %}
+                                    <li class="list-group-item">
+                                        <a href="{{ path('download_file', {id: file.id}) }}" target="_blank">{{ file.name }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        <p>No se encontraron archivos.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

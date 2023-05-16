@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @Route("/team/teams")
@@ -136,5 +137,67 @@ class TeacherTeamController extends AbstractController
         );
         return $this->redirectToRoute('team_students', ['id' => $team->getId()]);
     }
+
+    /**
+     * @Route("/upload/{id}", name="team_upload_notes")
+     */
+    public function uploadFilesView($id): Response
+    {
+        return $this->renderForm('notes/notes.html.twig', [
+            'controller_name' => 'Gestion de Equipos',
+            'id' => $id
+        ]);
+
+    }
+
+    /**
+     * @Route("/upload/{id}/file", name="upload_file")
+     */
+    public function uploadFiles(Request $request, $id): Response
+    {
+        if ($request->isMethod('POST')) {
+            $file = $request->files->get('file');
+
+            if ($file instanceof UploadedFile) {
+                $allowedExtensions = ['ppt', 'pptx', 'pdf'];
+                $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $extension = $file->guessExtension();
+
+                if (in_array($extension, $allowedExtensions)) {
+                    $newFilename = $originalFilename.'.'.$extension;
+
+                    $uploadsDirectory = $this->getParameter('kernel.project_dir') . '/public/uploads';
+                    $file->move($uploadsDirectory, $newFilename);
+                    $this->addFlash('success', 'Archivo subido exitosamente.');
+                } else {
+                    $this->addFlash('error', 'Solo se permiten archivos PPT, PPTX y PDF.');
+                }
+            }
+        }
+
+        return $this->render('teacher/teams/notes.html.twig', [
+            'controller_name' => 'Gestión de Equipos',
+            'id' => $id,
+        ]);
+    }
+    /**
+     * @Route("/showfiles", name="team_file")
+     */
+    public function showFiles(): Response
+    {
+
+        $directory = $this->getParameter('kernel.project_dir') . '/public/files';
+
+        $files = [];
+        if (is_dir($directory)) {
+            $files = array_diff(scandir($directory), ['.', '..']);
+        }
+
+        return $this->render('notes/index.html.twig', [
+            'controller_name' => 'Gestión de Equipos',
+            'files' => $files,
+        ]);
+    }
+
 
 }

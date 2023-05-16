@@ -35,6 +35,7 @@
                     <th scope="col"><i class="bi bi-pencil-fill"></i> Renombrar</th>
                     <th scope="col"><i class="bi bi-trash-fill"></i> Borrar</th>
                     <th scope="col"><i class="bi bi-people-fill"></i> Alumnos</th>
+                    <th scope="col"><i class="bi bi-file-earmark-pdf-fill"></i> Subir Apuntes</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -44,6 +45,7 @@
                         <td><a href="{{ path('team_edit', {id: team.id}) }}" class="btn btn-warning">Renombrar</a></td>
                         <td><a href="{{ path('team_delete', {id: team.id}) }}" class="btn btn-danger">Borrar</a></td>
                         <td><a href="{{ path('team_students', {id: team.id}) }}" class="btn btn-primary">Alumnos</a></td>
+                        <td><a href="{{ path('team_upload_notes', {id: team.id}) }}" class="btn btn-success"><i class="bi bi-cloud-upload-fill"></i></a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
