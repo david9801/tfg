@@ -16,5 +16,5 @@ Aplicación Symfony para servicio de videoconferencias para una plataforma de e-
 11. Read the license
 
 ## Tests:
-Run: `php bin/phpunit`.
+Run: `vendor/bin/phpunit tests `.
 
