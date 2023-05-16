@@ -28,6 +28,7 @@ final class LoginControllerTest extends BaseTestCase
     public function testIsLoggedOut()
     {
         list($client, $container, $crawler) = $this->loginTestClient();
+
         $crawler = $client->request('GET', $container->get('router')->generate('profile'));
         $crawler = $client->request('GET', $container->get('router')->generate('logout'));
 

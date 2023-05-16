@@ -11,7 +11,6 @@ final class TeacherLessonControllerTest extends BaseTestCase
      * @Route("/", name="lessons_admin")
      * @Route("/team/{id}", name="lessons_team_admin")
      * @Route("/team/{id}/new", name="new_lesson")
-     * @Route("/deletelesson/{id}", name="delete_lesson")
      */
     public function testNewLesson(): void
     {
@@ -40,6 +39,36 @@ final class TeacherLessonControllerTest extends BaseTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertLessonExists($crawler, 'Lección de prueba');
     }
+
+    /**
+     * @Route("/login", name="login")
+     * @Route("/", name="lessons_admin")
+     * @Route("/team/{id}", name="lessons_team_admin")
+     * @Route("/deletelesson/{id}", name="delete_lesson")
+     */
+    public function testDeleteNewLesson(): void
+    {
+        list($client, $container, $crawler) = $this->loginTestClient();
+
+        $crawler = $client->request('GET', $container->get('router')->generate('lessons_admin'));
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        if (!$this->hasTeamsToTest($crawler)) {
+            $this->markTestSkipped('No hay equipos para listar');
+            return;
+        }
+
+        $teamId = $this->getFirstTeamId($crawler);
+        $lessonsAdminUrl = $container->get('router')->generate('lessons_team_admin', ['id' => $teamId]);
+        $this->accessLessonsAdminPage($client, $lessonsAdminUrl);
+
+        $this->deleteLesson($client, 'Lección de prueba',$lessonsAdminUrl);
+
+        $crawler = $client->request('GET', $lessonsAdminUrl);
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertLessonNotExists($crawler, 'Lección de prueba');
+    }
+
 
     private function hasTeamsToTest(\Symfony\Component\DomCrawler\Crawler $crawler): bool
     {
@@ -80,5 +109,42 @@ final class TeacherLessonControllerTest extends BaseTestCase
         $lessonCount = $crawler->filter('table.table tbody tr td:contains("' . $lessonTitle . '")')->count();
         $this->assertGreaterThan(0, $lessonCount);
     }
+
+    private function assertLessonNotExists(\Symfony\Component\DomCrawler\Crawler $crawler, string $lessonTitle): void
+    {
+        $lessonCount = $crawler->filter('table.table tbody tr td:contains("' . $lessonTitle . '")')->count();
+        $this->assertSame(0, $lessonCount, 'La lección "' . $lessonTitle . '" no debería existir.');
+    }
+
+
+    private function deleteLesson(\Symfony\Bundle\FrameworkBundle\KernelBrowser $client, string $lessonTitle, String $lessonsAdminUrl): void
+    {
+        $crawler = $client->request('GET', $lessonsAdminUrl);
+        $lessonId = $this->getLessonIdToDelete($crawler, $lessonTitle);
+        $deleteButton = $crawler->filterXPath('//a[@class="btn btn-danger" and contains(@href, "'.$lessonId.'")]')->first();
+        $deleteUrl = $deleteButton->attr('href');
+
+        $client->request('GET', $deleteUrl);
+
+        $this->assertSame(302, $client->getResponse()->getStatusCode());
+    }
+
+    private function getLessonIdToDelete(\Symfony\Component\DomCrawler\Crawler $crawler, string $lessonTitle): ?string
+    {
+        $lessonRow = $crawler->filter('table.table tbody tr')->reduce(function ($row) use ($lessonTitle) {
+            return $row->filter('td')->first()->text() === $lessonTitle;
+        });
+
+        if ($lessonRow->count() > 0) {
+            $deleteButton = $lessonRow->filter('a.btn-danger');
+            $deleteUrl = $deleteButton->attr('href');
+            $lessonId = basename($deleteUrl);
+            return $lessonId;
+        }
+
+        return null;
+    }
+
+
 
 }
