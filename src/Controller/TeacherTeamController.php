@@ -160,15 +160,20 @@ class TeacherTeamController extends AbstractController
             $file = $request->files->get('file');
 
             if ($file instanceof UploadedFile) {
-                $allowedExtensions = ['ppt', 'pptx', 'pdf','xlsx', 'xls', 'docx'];
+                $allowedExtensions = ['ppt', 'pptx', 'pdf', 'xlsx', 'xls', 'docx'];
                 $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                 $extension = $file->guessExtension();
 
                 if (in_array($extension, $allowedExtensions)) {
-                    $newFilename = $originalFilename.'.'.$extension;
+                    $uploadsDirectory = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $id;
+                    if (!is_dir($uploadsDirectory)) {
+                        mkdir($uploadsDirectory, 0777, true);
+                    }
 
-                    $uploadsDirectory = $this->getParameter('kernel.project_dir') . '/public/uploads';
+                    $newFilename = uniqid() . '.' . $extension;
+
                     $file->move($uploadsDirectory, $newFilename);
+
                     $this->addFlash('success', 'Archivo subido exitosamente.');
                 } else {
                     $this->addFlash('error', 'Archivo NO permitido');
@@ -181,13 +186,15 @@ class TeacherTeamController extends AbstractController
             'id' => $id,
         ]);
     }
+
     /**
      * @Route("/showfiles/{id}", name="team_file")
      */
     public function showFiles($id): Response
     {
 
-        $directory = $this->getParameter('kernel.project_dir') . '/public/uploads';
+        $directory = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $id;
+
         $files = [];
         if (is_dir($directory)) {
             $files = scandir($directory);
@@ -205,11 +212,11 @@ class TeacherTeamController extends AbstractController
     }
 
     /**
-     * @Route("/download/{filename}", name="download_file")
+     * @Route("/download/{id}/{filename}", name="download_file")
      */
-    public function downloadFile($filename):Response
+    public function downloadFile($filename, $id):Response
     {
-        $filePath = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $filename;
+        $filePath = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $id . '/' . $filename;
 
         if (!file_exists($filePath)) {
             throw $this->createNotFoundException('El archivo no existe.');
