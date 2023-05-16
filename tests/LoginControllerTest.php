@@ -14,12 +14,11 @@ final class LoginControllerTest extends BaseTestCase
     public function testIsLoggedIn()
     {
         list($client, $container, $crawler) = $this->loginTestClient();
-        $crawler = $client->request('GET', $container->get('router')->generate('profile'));
-        $this->assertGreaterThan(
-            0,
-            $crawler->filter('html:contains("Bienvenido,")')->count()
-        );
+
+        $this->assertPageContains($client, $container, 'profile', 'html:contains("Bienvenido,")');
+
     }
+
     /**
      * @Route("/", name="index")
      * @Route("/login", name="login")
@@ -32,20 +31,20 @@ final class LoginControllerTest extends BaseTestCase
         $crawler = $client->request('GET', $container->get('router')->generate('profile'));
         $crawler = $client->request('GET', $container->get('router')->generate('logout'));
 
-        // Verificamos que hemos sido deslogueados y que se nos muestra el mensaje de bienvenida al inicio de sesión
-        $crawler = $client->request('GET', $container->get('router')->generate('index'));
+        $this->assertPageContains($client, $container, 'index', 'h5:contains("¡Bienvenido al Servicio de Videollamadas lowcost para una plataforma de e-learning !")');
+        $this->assertPageContains($client, $container, 'login', 'h1:contains("Por favor, entra aqui!")');
+    }
 
-        $this->assertGreaterThan(
-            0,
-            $crawler->filter('h5:contains("¡Bienvenido al Servicio de Videollamadas lowcost para una plataforma de e-learning !")')->count()
-        );
-        $crawler = $client->request('GET', $container->get('router')->generate('login'));
-
-        $this->assertGreaterThan(
-            0,
-            $crawler->filter('h1:contains("Por favor, entra aqui!")')->count()
-        );
-
+    /**
+     * @param \Symfony\Bundle\FrameworkBundle\KernelBrowser $client El cliente HTTP
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container El contenedor de servicios
+     * @param string $routeName El nombre de la ruta para acceder a la página
+     * @param string $selector El selector CSS para el elemento que se debe encontrar
+     */
+    private function assertPageContains(\Symfony\Bundle\FrameworkBundle\KernelBrowser $client, \Symfony\Component\DependencyInjection\ContainerInterface $container, string $routeName, string $selector): void
+    {
+        $crawler = $client->request('GET', $container->get('router')->generate($routeName));
+        $this->assertGreaterThan(0, $crawler->filter($selector)->count());
     }
 
 }

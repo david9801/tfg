@@ -17,30 +17,21 @@ final class TeacherTeamControllerTest extends BaseTestCase
         list($client, $container, $crawler) = $this->loginTestClient();
 
         $crawler = $client->request('GET', $container->get('router')->generate('teams_admin'));
-        // vista funciona
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $form = $crawler->filter('form[name="team"]')->form();
         $this->assertCount(1, [$form]);
 
-        $form['team[name]'] = 'Equipo de prueba';
+        $teamName = 'Equipo de prueba';
+        $this->setFormValue($form, 'team[name]', $teamName);
 
         $crawler = $client->submit($form);
 
-        // Verificar que la respuesta HTTP es 302 (redirección)
         $this->assertSame(302, $client->getResponse()->getStatusCode());
 
-        // Verificar que se redirecciona a la página de administración de equipos
         $this->assertTrue($client->getResponse()->isRedirect('/team/teams'));
 
-        // Visitar la página de administración de equipos
-        $crawler = $client->request('GET', '/team/teams');
-
-        // Verificar que el equipo creado aparece en la lista
-        $this->assertGreaterThan(
-            0,
-            $crawler->filter('table.table tbody tr td:contains("Equipo de prueba")')->count()
-        );
+        $this->teamCreatedExists($client);
     }
 
     /**
@@ -52,7 +43,8 @@ final class TeacherTeamControllerTest extends BaseTestCase
     {
         list($client, $container, $crawler) = $this->loginTestClient();
 
-        $teamToDelete = $this->getTeamByName($client, 'Equipo de prueba');
+        $teamName = 'Equipo de prueba';
+        $teamToDelete = $this->getTeamByName($client,$teamName);
         $this->assertNotNull($teamToDelete);
 
         $deleteUrl = $container->get('router')->generate('team_delete', ['id' => $teamToDelete->getId()]);
@@ -75,6 +67,29 @@ final class TeacherTeamControllerTest extends BaseTestCase
         $em = $client->getContainer()->get('doctrine')->getManager();
         $repository = $em->getRepository(\App\Entity\Team::class);
         return $repository->findOneBy(['name' => $teamName]);
+    }
+
+    /**
+     * @param \Symfony\Component\DomCrawler\Form $form El formulario.
+     * @param string $field El nombre del campo.
+     * @param string $value El valor a establecer en el campo.
+     */
+    private function setFormValue(\Symfony\Component\DomCrawler\Form $form, string $field, string $value): void
+    {
+        $form[$field] = $value;
+    }
+
+    /**
+     * @param \Symfony\Bundle\FrameworkBundle\KernelBrowser $client
+     * @return void
+     */
+    private function teamCreatedExists(\Symfony\Bundle\FrameworkBundle\KernelBrowser $client): void
+    {
+        $crawler = $client->request('GET', '/team/teams');
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('table.table tbody tr td:contains("Equipo de prueba")')->count()
+        );
     }
 
 }
