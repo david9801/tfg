@@ -144,8 +144,10 @@ class TeacherTeamController extends AbstractController
      */
     public function uploadFilesView($id): Response
     {
+        $files = $this->getFiles($id);
         return $this->renderForm('notes/notes.html.twig', [
-            'id' => $id
+            'id' => $id,
+            'files' => $files
         ]);
 
     }
@@ -155,35 +157,47 @@ class TeacherTeamController extends AbstractController
      */
     public function uploadFiles(Request $request, $id): Response
     {
-        if ($request->isMethod('POST')) {
-            $file = $request->files->get('file');
 
-            if ($file instanceof UploadedFile) {
-                $allowedExtensions = ['ppt', 'pptx', 'pdf', 'xlsx', 'xls', 'docx'];
-                $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $extension = $file->guessExtension();
-
-                if (in_array($extension, $allowedExtensions)) {
-                    $uploadsDirectory = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $id;
-                    if (!is_dir($uploadsDirectory)) {
-                        mkdir($uploadsDirectory, 0777, true);
-                    }
-
-                    $newFilename = uniqid() . '.' . $extension;
-
-                    $file->move($uploadsDirectory, $newFilename);
-
-                    $this->addFlash('success', 'Archivo subido exitosamente.');
-                } else {
-                    $this->addFlash('error', 'Archivo NO permitido');
-                }
-            }
+        if (!$request->isMethod('POST')) {
+            return $this->redirectToRoute('team_upload_notes', [
+                'id' => $id,
+            ]);
         }
 
-        return $this->render('notes/notes.html.twig', [
+        $file = $request->files->get('file');
+
+        if (!$file instanceof UploadedFile) {
+            return $this->redirectToRoute('team_upload_notes', [
+                'id' => $id,
+            ]);
+        }
+
+        list($allowedExtensions, $extension) = $this->allowedExtensions($file);
+
+        if (!in_array($extension, $allowedExtensions)) {
+            $this->addFlash('error', 'Archivo NO permitido');
+            return $this->redirectToRoute('team_upload_notes', [
+                'id' => $id,
+            ]);
+        }
+
+        $uploadsDirectory = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $id;
+
+        if (!is_dir($uploadsDirectory)) {
+            mkdir($uploadsDirectory, 0777, true);
+        }
+
+        $newFilename = uniqid() . '.' . $extension;
+
+        $file->move($uploadsDirectory, $newFilename);
+
+        $this->addFlash('success', 'Archivo subido exitosamente.');
+
+        return $this->redirectToRoute('team_upload_notes', [
             'id' => $id,
         ]);
     }
+
 
     /**
      * @Route("/showfiles/{id}", name="team_file")
@@ -191,16 +205,7 @@ class TeacherTeamController extends AbstractController
     public function showFiles($id): Response
     {
 
-        $directory = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $id;
-
-        $files = [];
-        if (is_dir($directory)) {
-            $files = scandir($directory);
-            $files = array_filter($files, function($file) use ($directory) {
-                return is_file($directory . '/' . $file);
-            });
-
-        }
+        $files = $this->getFiles($id);
 
         return $this->render('notes/index.html.twig', [
             'files' => $files,
@@ -227,5 +232,76 @@ class TeacherTeamController extends AbstractController
 
         return $response;
     }
+
+    /**
+     * @Route("/delete/{id}/{filename}", name="delete_file")
+     */
+    public function deleteFile($id, $filename): Response
+    {
+        $filePath = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $id . '/' . $filename;
+
+        if (file_exists($filePath)) {
+            try {
+                unlink($filePath);
+                $this->addFlash('success', 'Archivo eliminado exitosamente.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Error al eliminar el archivo: ' . $e->getMessage());
+            }
+        }
+        $directory = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $id;
+
+        $files = $this->getFilesInDirectory($directory);
+
+        if (empty($files)) {
+            $this->addFlash('error', 'No se encontraron archivos.');
+        }
+
+        return $this->redirectToRoute('team_upload_notes', [
+            'id' => $id,
+            'files' => $files
+        ]);
+    }
+
+
+    /**
+     * @param $id
+     * @return array
+     */
+    private function getFiles($id): array
+    {
+        $directory = $this->getParameter('kernel.project_dir') . '/public/uploads/' . $id;
+
+        $files = $this->getFilesInDirectory($directory);
+        return $files;
+    }
+
+    /**
+     * @param UploadedFile $file
+     * @return array
+     */
+    private function allowedExtensions(UploadedFile $file): array
+    {
+        $allowedExtensions = ['ppt', 'pptx', 'pdf', 'xlsx', 'xls', 'docx'];
+        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $file->guessExtension();
+        return array($allowedExtensions, $extension);
+    }
+
+    /**
+     * @param string $directory
+     * @return array
+     */
+    private function getFilesInDirectory(string $directory): array
+    {
+        $files = [];
+        if (is_dir($directory)) {
+            $files = scandir($directory);
+            $files = array_filter($files, function ($file) use ($directory) {
+                return is_file($directory . '/' . $file);
+            });
+        }
+        return $files;
+    }
+
 
 }

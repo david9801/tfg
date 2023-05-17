@@ -25,13 +25,35 @@
                 </div>
             {% endfor %}
             <div class="row text-center mt-5">
-                <form action="{{path('upload_file', {'id': id})  }}" method="post" enctype="multipart/form-data">
+                <form action="{{ path('upload_file', {'id': id}) }}" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="fileUpload" class="form-label">Selecciona un archivo:</label>
                         <input type="file" id="fileUpload" name="file" class="form-control-file">
                     </div>
                     <button type="submit" class="btn btn-primary">Subir archivo</button>
                 </form>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-lg-8 offset-lg-2">
+                    {% if files is not empty %}
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Lista de archivos</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                {% for file in files %}
+                                    <li class="list-group-item">
+                                        <a href="{{ path( 'download_file', { id: id, filename: file } ) }}" target="_blank">{{ file }}</a>
+                                        <a href="{{ path( 'delete_file', { id: id, filename: file } ) }}" class="btn btn-danger btn-sm float-end">Eliminar</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        <p>No se encontraron archivos.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
